@@ -787,6 +787,7 @@ function array_find_index(_array, _func, _offset, _length) {
         _offset += _step;
         _loops--;
     }
+    return -1;
 } // end array_find_index
 
 function array_any(_array, _func, _offset, _length) {
