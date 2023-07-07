@@ -56,7 +56,7 @@ yyTouchEvent.prototype.Clear = function () {
 ///          </summary>
 // #############################################################################################
 yyTouchEvent.prototype.SetTouchLocation = function(_x, _y) {
-    
+    /*
     if (g_RunRoom)
 	{
 		var pViews;
@@ -93,6 +93,7 @@ yyTouchEvent.prototype.SetTouchLocation = function(_x, _y) {
 			 }
 	    }
     }
+    */
     // Default, just store the values unmodified
     this.x = _x;
     this.y = _y;
