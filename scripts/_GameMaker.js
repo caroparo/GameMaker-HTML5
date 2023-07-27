@@ -2317,17 +2317,15 @@ function GameMaker_Tick()
     var delay = nextFrameAt - now;
     if (delay < 0) delay = 0;
     g_FrameStartTime = now + delay;
-    if (delay > 4) {
+    if (delay > 0) {
+    	if (delay < 4) delay = 4;
         // 4ms is the general minimum timeout time as per spec,
         // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
         setTimeout(function() {
             if (window.yyRequestAnimationFrame) {
                 window.yyRequestAnimationFrame(animate);
-            } else {
-                // Don't re-enter, that would be bad.
-                //animate();
             }
-        }, delay); 
+        }, delay);
     } else {
         if (window.yyRequestAnimationFrame) {
             window.yyRequestAnimationFrame(animate);
