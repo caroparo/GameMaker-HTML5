@@ -2234,33 +2234,6 @@ function GameMaker_Tick()
 	}
     newfps++;
 
-    // schedule next frame:
-    // this might be best done after if(!Run_Paused) block,
-    // but then an exception would halt the game loop.
-    var nextFrameAt = g_FrameStartTime + 1000 / TargetSpeed;
-    var now = Date.now();
-    var delay = g_FrameStartTime + 1000 / TargetSpeed - now;
-    if (delay < 0) delay = 0;
-    g_FrameStartTime = now + delay;
-    if (delay > 4) {
-        // 4ms is the general minimum timeout time as per spec,
-        // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
-        setTimeout(function() {
-            if (window.yyRequestAnimationFrame) {
-                window.yyRequestAnimationFrame(animate);
-            } else {
-                // Don't re-enter, that would be bad.
-                //animate();
-            }
-        }, delay); 
-    } else {
-        if (window.yyRequestAnimationFrame) {
-            window.yyRequestAnimationFrame(animate);
-        } else {
-            window.postMessage("yyRequestAnimationFrame", "*");
-        }
-    }
-
     if (!Run_Paused)
     {
 		ProcessMisc();
@@ -2333,5 +2306,33 @@ function GameMaker_Tick()
 	// if in DEBUG mode, do debug "stuff"
 	if (g_pGMFile.Options && g_pGMFile.Options.debugMode) {
 	    UpdateDebugWindow();
+    }
+
+    // schedule next frame:
+    // this might be best done after if(!Run_Paused) block,
+    // but then an exception would halt the game loop.
+    var frameInterval = 1000 / TargetSpeed;
+    var nextFrameAt = g_FrameStartTime + frameInterval;
+    var now = Date.now();
+    var delay = nextFrameAt - now;
+    if (delay < 0) delay = 0;
+    g_FrameStartTime = now + delay;
+    if (delay > 4) {
+        // 4ms is the general minimum timeout time as per spec,
+        // https://html.spec.whatwg.org/multipage/timers-and-user-prompts.html#timers
+        setTimeout(function() {
+            if (window.yyRequestAnimationFrame) {
+                window.yyRequestAnimationFrame(animate);
+            } else {
+                // Don't re-enter, that would be bad.
+                //animate();
+            }
+        }, delay); 
+    } else {
+        if (window.yyRequestAnimationFrame) {
+            window.yyRequestAnimationFrame(animate);
+        } else {
+            window.postMessage("yyRequestAnimationFrame", "*");
+        }
     }
 }
